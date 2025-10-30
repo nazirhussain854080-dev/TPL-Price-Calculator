@@ -98,11 +98,12 @@ select:disabled, input:disabled { background:#eee; cursor:not-allowed; }
 .button-group {
   display: flex;
   justify-content: space-between;
-  max-width: 400px;
-  margin: auto;
+  width: 100%; /* full width of container */
+  flex-wrap: nowrap; /* prevent wrapping */
+  margin-top: 25px;
 }
 button {
-  width: 48%; /* sit left and right */
+  width: 46%; /* sit left and right */
   padding: 14px;
   font-size: 17px;
   border-radius: 12px;
@@ -228,6 +229,7 @@ const inputs=["vehicleName","model","cylinder","bodyType","usage","seat"];inputs
 </script>
 </body>
 </html>
+
 
 
 
