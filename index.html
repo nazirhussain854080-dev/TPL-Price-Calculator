@@ -1,238 +1,499 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حاسبة تأمين ضد الغير - T.P.L Price Calculator</title>
-<link rel="icon" type="image/png" sizes="32x32" href="icon-512.png">
-<link rel="apple-touch-icon" href="icon-512.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#007bff">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>حاسبة تأمين ضد الغير - T.P.L Price Calculator</title>
+        <link rel="icon" type="image/png" sizes="32x32" href="icon-512.png" />
+        <link rel="apple-touch-icon" href="icon-512.png" />
+        <link rel="manifest" href="manifest.json" />
+        <meta name="theme-color" content="#007bff" />
+        <style>
+            body {
+                font-family: "Arial", sans-serif;
+                background: linear-gradient(135deg, #e9efff, #f4f6f9);
+                margin: 0;
+                padding: 20px;
+                direction: rtl;
+                text-align: center;
+                color: #333;
+            } /* Sticky Header */
+            .sticky-header {
+                position: sticky;
+                top: 0;
+                background: #02d2b4;
+                z-index: 999;
+                border-radius: 25px;
+                max-width: 680px;
+                margin: 2px auto; /* reduced top/bottom gap */
+                padding: 2px 10px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .sticky-header h2 {
+                margin: 2px 0;
+                font-size: 25px;
+                background: linear-gradient(90deg, #007bff, #00c3ff, #007bff);
+                color: white;
+                border-radius: 50px;
+                padding: 10px 20px;
+                display: inline-block;
+                font-weight: bold;
+                letter-spacing: 1px;
+                box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+                transition: transform 0.3s ease;
+            }
+            .sticky-header h2:hover {
+                transform: scale(1.05);
+            } /* Header Layout */
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                margin: 2px 0;
+            }
+            .contact-info {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 15px;
+                font-weight: bold;
+                color: #007bff;
+            }
+            .contact-info.left {
+                justify-content: flex-start;
+            }
+            .contact-info.right {
+                justify-content: flex-end;
+            }
+            .logo {
+                flex: 0 0 auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 180px;
+                height: 130px;
+                margin: 0 auto;
+            }
+            .logo img {
+                width: 190px;
+                height: 100px;
+                border-radius: 50%;
+                object-fit: contain;
+                background: transparent;
+                border: 3px solid #fff;
+                box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+                transition: transform 0.3s ease;
+            }
+            .logo img:hover {
+                transform: scale(1.08);
+            } /* Main container */
+            .container {
+                max-width: 650px;
+                background: #fff;
+                padding: 15px 20px;
+                border-radius: 25px;
+                border: 1px solid #e0e0e0;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+                margin: 1px auto;
+                position: relative;
+                overflow: hidden;
+            }
+            .container::after,
+            .container::before {
+                content: "NAZIR";
+                position: absolute;
+                user-select: none;
+                pointer-events: none;
+                font-weight: 900;
+                z-index: 0;
+            }
+            .container::after {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-10deg);
+                font-size: 150px;
+                color: rgba(0, 0, 0, 0.04);
+                letter-spacing: 12px;
+            }
+            .container::before {
+                bottom: 60px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 100px;
+                color: rgba(0, 0, 0, 0.07);
+                letter-spacing: 8px;
+            } /* Form Elements */
+            label {
+                display: block;
+                margin-top: 18px;
+                font-weight: bold;
+                font-size: 16px;
+            }
+            input,
+            select {
+                width: 100%;
+                max-width: 400px;
+                padding: 12px 15px;
+                margin: 10px auto;
+                border-radius: 12px;
+                border: 1px solid #ccc;
+                font-size: 16px;
+                display: block;
+                box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+            input:focus,
+            select:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+                outline: none;
+            }
+            select:disabled,
+            input:disabled {
+                background: #eee;
+                cursor: not-allowed;
+            }
+            .checkbox-group {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                margin-top: 12px;
+            }
+            .checkbox-group label {
+                font-weight: normal;
+                font-size: 15px;
+                margin-top: 0;
+            } /* Button group horizontal */
+            .button-group {
+                display: flex;
+                justify-content: space-between;
+                width: 100%; /* full width of container */
+                flex-wrap: nowrap; /* prevent wrapping */
+                margin-top: 25px;
+            }
+            button {
+                width: 48%; /* left and right */
+                padding: 14px;
+                font-size: 17px;
+                border-radius: 12px;
+                border: none;
+                color: #fff;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+                transition: 0.3s;
+            }
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 123, 255, 0.35);
+            }
+            #calcBtn {
+                background: #007bff;
+            }
+            #clearBtn {
+                background: #dc3545;
+            } /* Responsive adjustments for mobile */
+            @media (max-width: 600px) {
+                .button-group {
+                    flex-direction: row;
+                    gap: 4%;
+                }
+                button {
+                    width: 48%; /* keep horizontal on small screens */
+                }
+            }
+            .result {
+                margin-top: 30px;
+                background: #e9f7ef;
+                padding: 18px;
+                border-radius: 12px;
+                font-weight: bold;
+                text-align: center;
+                border: 1px solid #b7e4c7;
+                font-size: 18px;
+            } /* Responsive */
+            @media (max-width: 600px) {
+                .header {
+                    flex-direction: column;
+                    gap: 5px;
+                }
+                .contact-info {
+                    justify-content: center;
+                    font-size: 14px;
+                    margin: 2px 0;
+                }
+                .logo {
+                    width: 120px;
+                    height: 120px;
+                }
+                .logo img {
+                    width: 120px;
+                    height: 120px;
+                }
+                .container {
+                    padding: 20px 15px;
+                }
+                .button-group {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Sticky Header -->
+        <div class="sticky-header">
+            <h2>حاسبة تأمين ضد الغير <b>T.P.L Price Calculator</b></h2>
+            <div class="header">
+                <div class="contact-info left"><span>97430337101+</span>📱</div>
+                <div class="logo"><img src="weqaya-logo.png" alt="Weqaya Logo" /></div>
+                <div class="contact-info right"><span>weqaya.qa@gmail.com</span>📧</div>
+            </div>
+        </div>
+        <!-- Calculator Container -->
+        <div class="container">
+            <label>نوع المركبة / Vehicle Name:</label>
+            <input type="text" id="vehicleName" placeholder="مثلاً Toyota, Isuzu, Mitsubishi" />
+            <label>الطراز / Model:</label> <input type="text" id="model" placeholder="مثلاً Dyna, NBR, Canter" />
+            <label>عدد الإسطوانات / Cylinder:</label>
+            <input type="number" id="cylinder" placeholder="مثلاً 3 or 4 or 5 or 6 or ...." />
+            <label>شكل المركبة / Body Type:</label>
+            <select id="bodyType" onchange="autoFillUsage()">
+                <option value="">-- اختر / Select Body Type --</option>
+                <option value="saloon">صالون (Saloon)</option>
+                <option value="hatchback">هاتش باك (Hatchback)</option>
+                <option value="station wagon">ستشن واجن, مصندق (Station Wagon)</option>
+                <option value="sport">سبورت (Sport)</option>
+                <option value="coupe">كوبيه (Coupe)</option>
+                <option value="tipper">نشال, حاوية قمامه, حاوية غاز (Tipper)</option>
+                <option value="crane">,فوركلفت,رافعه شوكيه ,رافعة (Crane)</option>
+                <option value="water tanker">تنكر ماء, تنكر, تنكر مجاري (Water Tanker)</option>
+                <option value="lorry">لوري, لوري+رافعه ,لوري+كرين (Lorry)</option>
+                <option value="trailer">مقطورة (Trailer)</option>
+                <option value="trailer head">رأس تريلا (Trailer Head)</option>
+                <option value="bus">باص (Bus)</option>
+                <option value="van">فان (Van)</option>
+                <option value="pickup">غماره نصف ,بيك أب (Pickup)</option>
+                <option value="pickup taweel">
+                    ورشه عمل متحركة ,ثلاجه ,بيك اب+رافعه ,بيك اب+ثلاجه ,بيك أب طويل (Pickup 3ton)
+                </option>
+                <option value="motor bike">دراجة نارية (Motor Bike)</option>
+                <option value="shovel">شيول (Shovel)</option>
+                <option value="excavator">,شاحنه+حفاره ,شيول+حفاره ,حفارة (Excavator)</option>
+                <option value="سطحه حامل السيارة">سطحه حامل السيارة (Breakdown)</option>
+            </select>
+            <label>نوع اللوحة / Usage:</label>
+            <select id="usage" onchange="toggleBodyType()">
+                <option value="">-- اختر / Select Usage --</option>
+                <option value="private">خصوصي (Private)</option>
+                <option value="private transport">نقل خاص (Private Transport)</option>
+                <option value="equipment">معدة (Equipment)</option>
+                <option value="public transport">نقل عام (Public Transport)</option>
+                <option value="private motorcycle">درجة نارية خصوصية (Private Motorcycle)</option>
+            </select>
+            <div class="checkbox-group">
+                <input type="checkbox" id="siteCover" /> <label for="siteCover">Site Cover</label>
+            </div>
+            <label>عدد المقاعد / Seats:</label> <input type="number" id="seat" placeholder="مثلاً 1 او...." />
+            <div class="button-group">
+                <button id="calcBtn">احسب / Calculate</button> <button id="clearBtn">مسح / Clear</button>
+            </div>
+            <div class="result" id="result">المبلغ الإجمالي / Total Amount: -</div>
+        </div>
+        <script>
 
-<style>
-body {
-  font-family:"Arial",sans-serif;
-  background: linear-gradient(135deg,#e9efff,#f4f6f9);
-  margin:0; padding:20px;
-  direction: rtl; text-align:center; color:#333;
+// disable body type if equipment
+function toggleBodyType() {
+    const usage = document.getElementById("usage").value;
+    const bodyType = document.getElementById("bodyType");
+    bodyType.disabled = (usage === "equipment");
+    if (usage === "equipment") bodyType.value = "";
 }
 
-/* Sticky Header */
-.sticky-header {
-  position: sticky; top:0;
-  background:#02d2b4;
-  z-index:999;
-  border-radius:25px;
-  max-width:680px;
-  margin:2px auto; /* reduced top/bottom gap */
-  padding:2px 10px;
-  display:flex; flex-direction:column; align-items:center;
-}
-.sticky-header h2 {
-  margin:2px 0; font-size:25px;
-  background: linear-gradient(90deg,#007bff,#00c3ff,#007bff);
-  color:white; border-radius:50px; padding:10px 20px;
-  display:inline-block; font-weight:bold; letter-spacing:1px;
-  box-shadow:0 4px 15px rgba(0,123,255,0.3);
-  transition: transform 0.3s ease;
-}
-.sticky-header h2:hover { transform: scale(1.05); }
-
-/* Header Layout */
-.header {
-  display:flex; justify-content:space-between; align-items:center;
-  flex-wrap:wrap; margin:2px 0;
-}
-.contact-info {
-  flex:1; display:flex; align-items:center; gap:6px; font-size:15px;
-  font-weight:bold; color:#007bff;
-}
-.contact-info.left { justify-content:flex-start; }
-.contact-info.right { justify-content:flex-end; }
-
-.logo {
-  flex:0 0 auto; display:flex; justify-content:center; align-items:center;
-  width:180px; height:130px; margin:0 auto;
-}
-.logo img {
-  width:190px; height:100px; border-radius:50%; object-fit:contain;
-  background:transparent; border:3px solid #fff; box-shadow:0 4px 20px rgba(0,123,255,0.3);
-  transition:transform 0.3s ease;
-}
-.logo img:hover { transform: scale(1.08); }
-
-/* Main container */
-.container {
-  max-width:650px; background:#fff; padding:15px 20px;
-  border-radius:25px; border:1px solid #e0e0e0;
-  box-shadow:0 8px 30px rgba(0,0,0,0.12);
-  margin:1px auto; position:relative; overflow:hidden;
-}
-.container::after, .container::before {
-  content:"NAZIR"; position:absolute; user-select:none; pointer-events:none;
-  font-weight:900; z-index:0;
-}
-.container::after {
-  top:50%; left:50%; transform:translate(-50%,-50%) rotate(-10deg);
-  font-size:150px; color:rgba(0,0,0,0.04); letter-spacing:12px;
-}
-.container::before {
-  bottom:60px; left:50%; transform:translateX(-50%);
-  font-size:100px; color:rgba(0,0,0,0.07); letter-spacing:8px;
+function toggleSeat(disable) {
+    const seat = document.getElementById("seat");
+    seat.disabled = disable;
+    if (disable) seat.value = "";
 }
 
-/* Form Elements */
-label { display:block; margin-top:18px; font-weight:bold; font-size:16px; }
-input, select {
-  width:100%; max-width:400px; padding:12px 15px; margin:10px auto;
-  border-radius:12px; border:1px solid #ccc; font-size:16px;
-  display:block; box-shadow:inset 0 2px 4px rgba(0,0,0,0.05);
-}
-input:focus, select:focus { border-color:#007bff; box-shadow:0 0 10px rgba(0,123,255,0.3); outline:none; }
-select:disabled, input:disabled { background:#eee; cursor:not-allowed; }
+// Auto usage for Dyna / Canter / NBR
+function autoSetUsage() {
+    const name = document.getElementById("vehicleName").value.trim().toLowerCase();
+    const model = document.getElementById("model").value.trim().toLowerCase();
+    const usageSelect = document.getElementById("usage");
 
-.checkbox-group { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:12px; }
-.checkbox-group label { font-weight:normal; font-size:15px; margin-top:0; }
+    const specialVehicles = [
+        {name: "toyota", model: "dyna"},
+        {name: "isuzu", model: "nbr"},
+        {name: "mitsubishi", model: "canter"},
+    ];
 
-/* Button group horizontal */
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  width: 100%; /* full width of container */
-  flex-wrap: nowrap; /* prevent wrapping */
-  margin-top: 25px;
+    const match = specialVehicles.find(v => name.includes(v.name) && model.includes(v.model));
+    if (match) {
+        usageSelect.value = "private transport";
+        toggleBodyType();
+    }
 }
-button {
-  width: 48%; /* left and right */
-  padding: 14px;
-  font-size: 17px;
-  border-radius: 12px;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,123,255,0.3);
-  transition: 0.3s;
-}
-button:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,123,255,0.35); }
-#calcBtn { background:#007bff; }
-#clearBtn { background:#dc3545; }
 
-/* Responsive adjustments for mobile */
-@media(max-width:600px){
-  .button-group {
-    flex-direction: row;
-    gap: 4%;
-  }
-  button {
-    width: 48%; /* keep horizontal on small screens */
-  }
+document.getElementById("vehicleName").addEventListener("input", autoSetUsage);
+document.getElementById("model").addEventListener("input", autoSetUsage);
+
+
+// Auto fill when selecting body type
+function autoFillUsage() {
+    const body = document.getElementById("bodyType").value.toLowerCase();
+    const usageSelect = document.getElementById("usage");
+
+    usageSelect.disabled = false;
+    toggleSeat(false);
+
+    if (["pickup", "pickup taweel", "van"].includes(body))
+        usageSelect.value = "private transport";
+
+    else if (["sport", "coupe", "station wagon", "saloon", "hatchback"].includes(body))
+        usageSelect.value = "private";
+
+    else if (body === "motor bike")
+        usageSelect.value = "private motorcycle";
+
+    else if (body === "bus")
+        usageSelect.value = "private transport";
+
+    else if (body === "trailer") {
+        usageSelect.value = "";
+        usageSelect.disabled = true;
+        toggleSeat(true);
+    }
+
+    toggleBodyType();
 }
 
 
-.result {
-  margin-top:30px; background:#e9f7ef; padding:18px;
-  border-radius:12px; font-weight:bold; text-align:center; border:1px solid #b7e4c7;
-  font-size:18px;
+// MAIN CALCULATION
+function calculate() {
+
+    const name = document.getElementById("vehicleName").value.trim().toLowerCase();
+    const model = document.getElementById("model").value.trim().toLowerCase();
+    const cylinder = parseInt(document.getElementById("cylinder").value) || 0;
+    const usage = document.getElementById("usage").value.toLowerCase();
+    const body = document.getElementById("bodyType").value.toLowerCase();
+    const seat = parseInt(document.getElementById("seat").value) || 0;
+    const siteCover = document.getElementById("siteCover").checked;
+
+    let total = null;
+
+    // special case platform carrier
+    if (body === "سطحه حامل السيارة" && cylinder === 4 && usage === "private transport") {
+        const dohaPrice = 700 + seat * 50;
+        const masrPrice = 600 + seat * 50;
+
+        document.getElementById("result").innerHTML =
+            `المبلغ الإجمالي / Total Amount:<br>
+            <strong>Doha: ${dohaPrice} QAR</strong><br>
+            <strong>Masr: ${masrPrice} QAR</strong>`;
+        return;
+    }
+
+    const specialVehicles = [
+        {name: "toyota", model: "dyna"},
+        {name: "isuzu", model: "nbr"},
+        {name: "mitsubishi", model: "canter"},
+    ];
+
+    const isSpecialVehicle = specialVehicles.some(v =>
+        name.includes(v.name) && model.includes(v.model)
+    );
+
+    if (isSpecialVehicle || body === "pickup taweel")
+        total = 600 + seat * 50;
+
+    else if (["motor bike"].includes(body) || name.includes("bike"))
+        total = 200 + seat * 100;
+
+    else if (usage === "equipment")
+        total = 900 + seat * 50;
+
+    else if (body === "bus")
+        total = seat <= 26 ? 600 + seat * 25 :
+                seat <= 45 ? 800 + seat * 25 :
+                1000 + seat * 25;
+
+    else if (body === "trailer head")
+        total = 900 + seat * 50;
+
+    else if (body === "trailer")
+        total = 900;
+
+    else if (
+        ["crane", "lorry", "water tanker", "tipper", "shovel", "excavator"]
+            .includes(body) && usage === "private transport"
+    )
+        total = 800 + seat * 50;
+
+    else if (["van", "pickup"].includes(body) && usage === "private transport") {
+        if (cylinder === 4) total = 500 + seat * 50;
+        else if (cylinder === 6) total = 600 + seat * 50;
+        else if (cylinder === 8) total = 700 + seat * 50;
+    }
+
+    else if (["station wagon", "sport", "coupe"].includes(body) && usage === "private")
+        total = cylinder <= 4 ? 500 :
+                cylinder <= 6 ? 600 :
+                cylinder === 8 ? 800 :
+                1200;
+
+    else if (["saloon", "hatchback"].includes(body) && usage === "private")
+        total = cylinder <= 4 ? 400 :
+                cylinder <= 6 ? 500 :
+                cylinder === 8 ? 600 :
+                800;
+
+
+    if (usage === "equipment" && siteCover)
+        total = total + 180;
+
+    document.getElementById("result").innerHTML =
+        `المبلغ الإجمالي / Total Amount: <strong>${total ?? 0} ريال قطري / QAR</strong>`;
 }
 
-/* Responsive */
-@media(max-width:600px){
-  .header{flex-direction:column; gap:5px;}
-  .contact-info{justify-content:center; font-size:14px; margin:2px 0;}
-  .logo{width:120px; height:120px;}
-  .logo img{width:120px; height:120px;}
-  .container{padding:20px 15px;}
-  .button-group{flex-direction:column; gap:10px;}
-}
-</style>
-</head>
-<body>
 
-<!-- Sticky Header -->
-<div class="sticky-header">
-  <h2>حاسبة تأمين ضد الغير <b>T.P.L Price Calculator</b></h2>
-  <div class="header">
-    <div class="contact-info left"><span>97430337101+</span>📱</div>
-    <div class="logo"><img src="weqaya-logo.png" alt="Weqaya Logo"></div>
-    <div class="contact-info right"><span>weqaya.qa@gmail.com</span>📧</div>
-  </div>
-</div>
+// CLEAR
+document.getElementById("clearBtn").addEventListener("click", () => {
 
-<!-- Calculator Container -->
-<div class="container">
-  <label>نوع المركبة / Vehicle Name:</label>
-  <input type="text" id="vehicleName" placeholder="مثلاً Toyota, Isuzu, Mitsubishi">
-  <label>الطراز / Model:</label>
-  <input type="text" id="model" placeholder="مثلاً Dyna, NBR, Canter">
-  <label>عدد الإسطوانات / Cylinder:</label>
-  <input type="number" id="cylinder" placeholder="مثلاً 3 or 4 or 5 or 6 or ....">
-  <label>شكل المركبة / Body Type:</label>
-  <select id="bodyType" onchange="autoFillUsage()">
-    <option value="">-- اختر / Select Body Type --</option>
-    <option value="saloon">صالون (Saloon)</option>
-    <option value="hatchback">هاتش باك (Hatchback)</option>
-    <option value="station wagon">ستشن واجن, مصندق (Station Wagon)</option>
-    <option value="sport">سبورت (Sport)</option>
-    <option value="coupe">كوبيه (Coupe)</option>
-    <option value="tipper">نشال, حاوية قمامه, حاوية غاز (Tipper)</option>
-    <option value="crane">,فوركلفت,رافعه شوكيه ,رافعة (Crane)</option>
-    <option value="water tanker">تنكر ماء, تنكر, تنكر مجاري (Water Tanker)</option>
-    <option value="lorry">لوري, لوري+رافعه ,لوري+كرين (Lorry)</option>
-    <option value="trailer">مقطورة (Trailer)</option>
-    <option value="trailer head">رأس تريلا (Trailer Head)</option>
-    <option value="bus">باص (Bus)</option>
-    <option value="van">فان (Van)</option>
-    <option value="pickup">غماره نصف ,بيك أب (Pickup)</option>
-    <option value="pickup taweel">ورشه عمل متحركة ,ثلاجه ,بيك اب+رافعه ,بيك اب+ثلاجه ,بيك أب طويل (Pickup 3ton)</option>
-    <option value="motor bike">دراجة نارية (Motor Bike)</option>
-    <option value="shovel">شيول (Shovel)</option>
-    <option value="excavator">,شاحنه+حفاره ,شيول+حفاره ,حفارة (Excavator)</option>
-    <option value="سطحه حامل السيارة">سطحه حامل السيارة (Breakdown)</option>
-  </select>
+    ["vehicleName","model","cylinder","usage","bodyType","seat"].forEach(id =>
+        document.getElementById(id).value = ""
+    );
 
-  <label>نوع اللوحة / Usage:</label>
-  <select id="usage" onchange="toggleBodyType()">
-    <option value="">-- اختر / Select Usage --</option>
-    <option value="private">خصوصي (Private)</option>
-    <option value="private transport">نقل خاص (Private Transport)</option>
-    <option value="equipment">معدة (Equipment)</option>
-    <option value="public transport">نقل عام (Public Transport)</option>
-    <option value="private motorcycle">درجة نارية خصوصية (Private Motorcycle)</option>
-  </select>
+    document.getElementById("usage").disabled = false;
+    document.getElementById("siteCover").checked = false;
+    toggleSeat(false);
 
-  <div class="checkbox-group">
-    <input type="checkbox" id="siteCover">
-    <label for="siteCover">Site Cover</label>
-  </div>
+    document.getElementById("result").innerHTML =
+        "المبلغ الإجمالي / Total Amount: -";
+});
 
-  <label>عدد المقاعد / Seats:</label>
-  <input type="number" id="seat" placeholder="مثلاً 1 او....">
 
-  <div class="button-group">
-    <button id="calcBtn">احسب / Calculate</button>
-    <button id="clearBtn">مسح / Clear</button>
-  </div>
+// ENTER NAVIGATION
+const inputs = ["vehicleName","model","cylinder","bodyType","usage","seat"];
 
-  <div class="result" id="result">المبلغ الإجمالي / Total Amount: -</div>
-</div>
+inputs.forEach((id, idx) => {
+    document.getElementById(id).addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (idx < inputs.length - 1)
+                document.getElementById(inputs[idx + 1]).focus();
+            else
+                document.getElementById("calcBtn").click();
+        }
+    });
+});
 
-<script>
-// --- JS: same as original, unchanged ---
-function toggleBodyType(){const usage=document.getElementById("usage").value;const bodyType=document.getElementById("bodyType");bodyType.disabled=(usage==="equipment");if(usage==="equipment") bodyType.value="";}
-function toggleSeat(disable){const seat=document.getElementById("seat");seat.disabled=disable;if(disable) seat.value="";}
-function autoSetUsage(){const name=document.getElementById("vehicleName").value.trim().toLowerCase();const model=document.getElementById("model").value.trim().toLowerCase();const usageSelect=document.getElementById("usage");const specialVehicles=[{name:"toyota",model:"dyna"},{name:"isuzu",model:"nbr"},{name:"mitsubishi",model:"canter"}];const match=specialVehicles.find(v=>name.includes(v.name)&&model.includes(v.model));if(match){usageSelect.value="private transport";toggleBodyType();}}
-document.getElementById("vehicleName").addEventListener("input",autoSetUsage);document.getElementById("model").addEventListener("input",autoSetUsage);
-function autoFillUsage(){const body=document.getElementById("bodyType").value.toLowerCase();const usageSelect=document.getElementById("usage");usageSelect.disabled=false;toggleSeat(false);if(["pickup","pickup taweel","van"].includes(body)) usageSelect.value="private transport";else if(["sport","coupe","station wagon","saloon","hatchback"].includes(body)) usageSelect.value="private";else if(body==="motor bike") usageSelect.value="private motorcycle";else if(body==="bus") usageSelect.value="private transport";else if(body==="trailer"){usageSelect.value="";usageSelect.disabled=true;toggleSeat(true);}toggleBodyType();}
-function calculate(){const name=document.getElementById("vehicleName").value.trim().toLowerCase();const model=document.getElementById("model").value.trim().toLowerCase();const cylinder=parseInt(document.getElementById("cylinder").value)||0;const usage=document.getElementById("usage").value.toLowerCase();const body=document.getElementById("bodyType").value.toLowerCase();const seat=parseInt(document.getElementById("seat").value)||0;const siteCover=document.getElementById("siteCover").checked;let total=null;if(body==="سطحه حامل السيارة" && cylinder===4 && usage==="private transport"){const dohaPrice=700+seat*50;const masrPrice=600+seat*50;document.getElementById("result").innerHTML=`المبلغ الإجمالي / Total Amount:<br><strong>Doha: ${dohaPrice} QAR</strong><br><strong>مصر: ${masrPrice} QAR</strong>`;return;}const specialVehicles=[{name:"toyota",model:"dyna"},{name:"isuzu",model:"nbr"},{name:"mitsubishi",model:"canter"}];const isSpecialVehicle=specialVehicles.some(v=>name.includes(v.name)&&model.includes(v.model));if(isSpecialVehicle || body==="pickup taweel") total=600+seat*50;else if(body==="motor bike"||name.includes("bike")||name.includes("motorbike")) total=200+seat*100;else if(usage==="equipment") total=900+seat*50;else if(body==="bus") total=seat<=26?600+seat*25:seat<=45?800+seat*25:1000+seat*25;else if(body==="trailer head") total=900+seat*50;else if(body==="trailer") total=900;else if(["crane","lorry","water tanker","tipper","shovel","excavator"].includes(body)&&usage==="private transport") total=800+seat*50;else if(body==="van" && usage==="private") {total = 400;} else if(["van","pickup"].includes(body)&&usage==="private transport"){if(cylinder===4) total=500+seat*50;else if(cylinder===6) total=600+seat*50;else if(cylinder===8) total=700+seat*50;}else if(["station wagon","sport","coupe"].includes(body)&&usage==="private") total=cylinder<=4?500:cylinder<=6?600:cylinder===8?800:1200;else if(["saloon","hatchback"].includes(body)&&usage==="private") total=cylinder<=4?400:cylinder<=6?500:cylinder===8?600:800;if(usage==="equipment" && siteCover) total=(total||0)+180;document.getElementById("result").innerHTML=`المبلغ الإجمالي / Total Amount: <strong>${total!==null?total:0} ريال قطري / QAR</strong>`;}
-document.getElementById("clearBtn").addEventListener("click",()=>{["vehicleName","model","cylinder","usage","bodyType","seat"].forEach(id=>document.getElementById(id).value="");document.getElementById("usage").disabled=false;document.getElementById("siteCover").checked=false;toggleSeat(false);toggleBodyType();document.getElementById("result").innerHTML="المبلغ الإجمالي / Total Amount: -";});
-const inputs=["vehicleName","model","cylinder","bodyType","usage","seat"];inputs.forEach((id,idx)=>{document.getElementById(id).addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();if(idx<inputs.length-1) document.getElementById(inputs[idx+1]).focus();else document.getElementById("calcBtn").click();}});});document.getElementById("calcBtn").addEventListener("click",calculate);
+document.getElementById("calcBtn").addEventListener("click", calculate);
+
 </script>
-</body>
+
+    </body>
 </html>
-
-
-
-
-
-
-
